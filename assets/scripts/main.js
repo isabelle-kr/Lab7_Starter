@@ -53,6 +53,19 @@ function initializeServiceWorker() {
   //            log that it was successful.
   // B5. TODO - In the event that the service worker registration fails, console
   //            log that it has failed.
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async function() {
+      try { 
+        const swReg = await navigator.serviceWorker.register("./sw.js");
+        if (swReg.active) {
+          console.log("Service worker registration successful");
+        }
+      }
+      catch(e) {
+        console.log("Service worker registration failed");
+      }
+    });
+  }
   // STEPS B6 ONWARDS WILL BE IN /sw.js
 }
 
@@ -75,7 +88,7 @@ async function getRecipes() {
   // The rest of this method will be concerned with requesting the recipes
   // from the network
   // A2. TODO - Create an empty array to hold the recipes that you will fetch
-    let recipes = [];
+  let recipes = [];
   // A3. TODO - Return a new Promise. If you are unfamiliar with promises, MDN
   //            has a great article on them. A promise takes one parameter - A
   //            function (we call these callback functions). That function will
@@ -114,7 +127,6 @@ async function getRecipes() {
         saveRecipesToStorage(recipes);
         Promise.resolve(recipes);
       }
-
     }
     catch(e) {
       // A10. TODO - Log any errors from catch using console.error
